@@ -35,13 +35,20 @@ const expressJWT = require('express-jwt')
 // 导入配置文件 
 const config = require('./config')
 // 使用 .unless({ path: [/^\/api\//] }) 指定哪些接口不需要进行 Token 的身份认证 
-app.use(expressJWT({ secret: config.jwtSecretKey}).unless({ path: [/^\/api\//] }))
+app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\//] }))
 
 // 写在跨域与配置表单之后
 // 导入自定义用户路由模块
 const userRouter = require('./router/user')
 // 注册全局中间件
 app.use('/api', userRouter)
+
+// 导入用户信息模块
+const userinfoRouter = require('./router/userinfo')
+// 已/my开头的 进行token 认证
+app.use('/my', userinfoRouter)
+
+
 
 // 错误捕获
 const joi = require('@hapi/joi')
